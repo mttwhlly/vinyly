@@ -3,9 +3,10 @@
 	import { fade, fly } from 'svelte/transition';
 	import VinylGrid from '$lib/components/vinyl-grid.svelte';
 	import SpotifyPlayer from '$lib/components/spotify-player.svelte';
-	import Header from '$lib/components/Header.svelte';
+	import Header from '$lib/components/header.svelte';
 	import LoginScreen from '$lib/components/login-screen.svelte';
 	import DiscogsConnect from '$lib/components/discogs-connect.svelte';
+	import PlayerStatus from '$lib/components/player-status.svelte';
 	import { spotifyStore } from '$lib/stores/spotify';
 	import { collectionWithFiltered } from '$lib/stores/collection';
 	import { authStore } from '$lib/stores/auth';
@@ -98,4 +99,7 @@
 		<!-- Fixed Player at Bottom -->
 		<SpotifyPlayer />
 	</div>
+
+	<!-- Player Status Indicator -->
+	<PlayerStatus />
 {/if}

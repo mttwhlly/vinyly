@@ -70,6 +70,10 @@ function createSpotifyStore() {
 		player.addListener('ready', ({ device_id }: any) => {
 			console.log('Ready with Device ID', device_id);
 			update((state) => ({ ...state, isConnected: true, deviceId: device_id }));
+
+			// Transfer playback to this device
+			transferPlaybackToDevice(device_id);
+
 			resolve(device_id);
 		});
 
@@ -107,6 +111,27 @@ function createSpotifyStore() {
 
 		// Connect to the player
 		player.connect();
+	};
+
+	// Transfer playback to our device
+	const transferPlaybackToDevice = async (deviceId: string) => {
+		try {
+			await fetch('https://api.spotify.com/v1/me/player', {
+				method: 'PUT',
+				headers: {
+					Authorization: `Bearer ${accessToken}`,
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify({
+					device_ids: [deviceId],
+					play: false // Don't start playing immediately
+				})
+			});
+			console.log('Playback transferred to Vinyl Player device');
+		} catch (error) {
+			console.warn('Could not transfer playback:', error);
+			// This is not critical, user can still play music
+		}
 	};
 
 	return {

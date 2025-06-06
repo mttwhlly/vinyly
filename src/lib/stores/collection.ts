@@ -1,8 +1,19 @@
 import { writable, derived } from 'svelte/store';
 import type { Writable } from 'svelte/store';
-import { discogsService } from '$lib/services/discogs';
-import { spotifyMatchingService } from '$lib/services/spotify';
-import type { VinylRecord } from '$lib/services/discogs';
+import { authStore } from './auth';
+import { get } from 'svelte/store';
+
+export interface VinylRecord {
+	id: string;
+	title: string;
+	artist: string;
+	year: number;
+	coverImage: string;
+	discogsId: string;
+	spotifyId?: string;
+	genres: string[];
+	label: string;
+}
 
 interface CollectionState {
 	items: VinylRecord[];
@@ -133,40 +144,69 @@ function createCollectionStore() {
 				loading: true,
 				error: null,
 				discogsUsername: username,
-				progress: { stage: 'Testing connection...', current: 0, total: 100 }
+				progress: { stage: 'Connecting to server...', current: 10, total: 100 }
 			}));
 
 			try {
-				// Test Discogs connection
-				const connected = await discogsService.testConnection();
-				if (!connected) {
-					throw new Error('Failed to connect to Discogs. Check your access token.');
+				const auth = get(authStore);
+				if (!auth.accessToken) {
+					throw new Error('Spotify access token required');
 				}
 
-				// Fetch collection from Discogs
+				// Test connection first
 				update((state) => ({
 					...state,
-					progress: { stage: 'Fetching collection from Discogs...', current: 20, total: 100 }
+					progress: { stage: 'Testing Discogs connection...', current: 20, total: 100 }
 				}));
 
-				const discogsRecords = await discogsService.getAllUserCollection(username);
+				const testResponse = await fetch(`/api/discogs/collection/${username}`, {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json',
+						Authorization: `Bearer ${auth.accessToken}`
+					},
+					body: JSON.stringify({ action: 'test_connection' })
+				});
 
+				if (!testResponse.ok) {
+					const errorData = await testResponse.json().catch(() => ({}));
+					throw new Error(errorData.message || 'Failed to connect to Discogs');
+				}
+
+				// Fetch collection with Spotify matching
 				update((state) => ({
 					...state,
-					progress: { stage: 'Matching with Spotify...', current: 60, total: 100 }
+					progress: { stage: 'Fetching collection from Discogs...', current: 40, total: 100 }
 				}));
 
-				// Match with Spotify
-				const matchedRecords = await spotifyMatchingService.matchRecordsWithSpotify(discogsRecords);
+				const collectionResponse = await fetch(`/api/discogs/collection/${username}?sync=matched`, {
+					headers: {
+						Authorization: `Bearer ${auth.accessToken}`
+					}
+				});
+
+				if (!collectionResponse.ok) {
+					const errorData = await collectionResponse.json().catch(() => ({}));
+					throw new Error(errorData.message || 'Failed to fetch collection');
+				}
 
 				update((state) => ({
 					...state,
-					items: matchedRecords,
+					progress: { stage: 'Processing results...', current: 90, total: 100 }
+				}));
+
+				const data = await collectionResponse.json();
+
+				update((state) => ({
+					...state,
+					items: data.records || [],
 					loading: false,
 					progress: null
 				}));
 
-				console.log(`Successfully loaded ${matchedRecords.length} records from Discogs`);
+				console.log(
+					`Successfully loaded ${data.total} records from Discogs (${data.matchedCount} matched with Spotify)`
+				);
 			} catch (error) {
 				console.error('Discogs sync error:', error);
 				update((state) => ({
@@ -175,6 +215,44 @@ function createCollectionStore() {
 					loading: false,
 					progress: null
 				}));
+			}
+		},
+
+		// Test Discogs connection
+		async testConnection(): Promise<boolean> {
+			try {
+				const response = await fetch('/api/discogs/collection/test', {
+					method: 'POST',
+					headers: { 'Content-Type': 'application/json' },
+					body: JSON.stringify({ action: 'test_connection' })
+				});
+
+				if (!response.ok) return false;
+
+				const data = await response.json();
+				return data.connected;
+			} catch (error) {
+				console.error('Connection test failed:', error);
+				return false;
+			}
+		},
+
+		// Clear cache for a user
+		async clearCache(username: string) {
+			try {
+				const auth = get(authStore);
+				if (!auth.accessToken) return;
+
+				await fetch(`/api/discogs/collection/${username}`, {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json',
+						Authorization: `Bearer ${auth.accessToken}`
+					},
+					body: JSON.stringify({ action: 'clear_cache' })
+				});
+			} catch (error) {
+				console.error('Failed to clear cache:', error);
 			}
 		},
 
