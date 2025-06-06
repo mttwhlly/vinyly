@@ -1,12 +1,26 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" class="dark">
 	<head>
 		<meta charset="utf-8" />
 		<link rel="icon" href="%sveltekit.assets%/favicon.png" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>Vinyl Collection Player</title>
 		%sveltekit.head%
 	</head>
-	<body data-sveltekit-preload-data="hover">
+	<body data-sveltekit-preload-data="hover" class="bg-gray-900 text-white">
 		<div style="display: contents">%sveltekit.body%</div>
+
+		<!-- Initialize Spotify callback before SDK loads -->
+		<script>
+			// Ensure the callback is defined before SDK loads
+			window.onSpotifyWebPlaybackSDKReady =
+				window.onSpotifyWebPlaybackSDKReady ||
+				function () {
+					console.log('Spotify SDK ready, but no handler defined yet');
+				};
+		</script>
+
+		<!-- Spotify Web Playback SDK -->
+		<script src="https://sdk.scdn.co/spotify-player.js"></script>
 	</body>
 </html>

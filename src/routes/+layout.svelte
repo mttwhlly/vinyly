@@ -1,7 +1,16 @@
 <script lang="ts">
 	import '../app.css';
+	import { onMount } from 'svelte';
+	import { spotifyStore } from '$lib/stores/spotify';
 
-	let { children } = $props();
+	// Cleanup on page unload
+	onMount(() => {
+		return () => {
+			spotifyStore.disconnect();
+		};
+	});
 </script>
 
-{@render children()}
+<main>
+	<slot />
+</main>
