@@ -8,27 +8,12 @@
 	}
 </script>
 
-<div
-	class="flex min-h-screen items-center justify-center bg-gradient-to-br from-gray-900 via-purple-900 to-gray-900"
->
+<div class="flex min-h-screen items-center justify-center">
 	<div class="container mx-auto px-4" in:fade={{ duration: 800 }}>
 		<div class="mx-auto max-w-2xl text-center">
 			<!-- Logo & Title -->
 			<div class="mb-8">
-				<div
-					class="mb-6 flex items-center justify-center space-x-4"
-					in:fly={{ y: -20, duration: 600, delay: 200 }}
-				>
-					<Disc3 class="animate-spin-slow h-16 w-16 text-purple-400" />
-					<Music class="h-12 w-12 text-pink-400" />
-					<Play class="h-14 w-14 text-purple-300" />
-				</div>
-
-				<h1
-					class="mb-4 bg-gradient-to-r from-purple-400 via-pink-400 to-purple-300 bg-clip-text text-5xl font-bold text-transparent md:text-6xl"
-				>
-					Vinyl Player
-				</h1>
+				<h1 class="mb-4 text-5xl font-bold md:text-6xl">Vinyl Player</h1>
 				<p class="text-xl leading-relaxed text-gray-300">
 					Stream your Discogs vinyl collection through Spotify
 				</p>

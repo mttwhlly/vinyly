@@ -1,4 +1,4 @@
-# 🎵 Vinyl Player
+# 🎵 Vinyly
 
 **Stream your Discogs vinyl collection through Spotify with a beautiful web interface.**
 
@@ -346,10 +346,8 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 💬 Support
 
-- 🐛 **Bug Reports**: [Open an issue](https://github.com/yourusername/vinyl-player/issues)
-- 💡 **Feature Requests**: [Open a discussion](https://github.com/yourusername/vinyl-player/discussions)
-- 📧 **Email**: support@vinylplayer.app
-- 💬 **Discord**: [Join our community](https://discord.gg/vinylplayer)
+- 🐛 **Bug Reports**: [Open an issue](https://github.com/mttwhlly/vinyly/issues)
+- 💡 **Feature Requests**: [Open a discussion](https://github.com/yourusername/vinyly/discussions)
 
 ---
 

@@ -21,12 +21,7 @@
 		<div class="flex h-16 items-center justify-between">
 			<!-- Logo -->
 			<div class="flex items-center space-x-3" in:fly={{ x: -20, duration: 500 }}>
-				<Disc3 class="h-8 w-8 text-purple-400" />
-				<h1
-					class="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-xl font-bold text-transparent"
-				>
-					Vinyl Player
-				</h1>
+				<h1 class="text-xl font-bold">Vinyl Player</h1>
 			</div>
 
 			<!-- Search Bar -->

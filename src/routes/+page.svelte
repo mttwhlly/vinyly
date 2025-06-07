@@ -53,19 +53,14 @@
 		<LoginScreen />
 	</div>
 {:else}
-	<div
-		class="min-h-screen bg-gradient-to-br from-gray-900 via-purple-900 to-gray-900"
-		in:fade={{ duration: 500 }}
-	>
+	<div class="min-h-screen" in:fade={{ duration: 500 }}>
 		<Header />
 
 		<main class="container mx-auto px-4 py-8">
 			{#if loading}
 				<div in:fly={{ y: 20, duration: 500 }} class="flex h-64 items-center justify-center">
 					<div class="text-center">
-						<div
-							class="mx-auto mb-4 h-12 w-12 animate-spin rounded-full border-b-2 border-purple-400"
-						></div>
+						<div class="mx-auto mb-4 h-12 w-12 animate-spin rounded-full border-b-2"></div>
 						<p class="text-gray-300">Setting up your account...</p>
 					</div>
 				</div>

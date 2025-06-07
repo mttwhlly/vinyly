@@ -46,7 +46,6 @@
 		in:fade={{ duration: 500 }}
 	>
 		<div class="mb-6 text-center">
-			<Database class="mx-auto mb-3 h-12 w-12 text-purple-400" />
 			<h2 class="mb-2 text-xl font-bold text-white">Connect Discogs</h2>
 			<p class="text-sm text-gray-400">Enter your Discogs username to load your vinyl collection</p>
 		</div>
