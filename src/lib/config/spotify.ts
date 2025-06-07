@@ -10,7 +10,7 @@ const getEnvVar = (key: string, fallback?: string): string => {
 
 export const SPOTIFY_CONFIG = {
 	clientId: getEnvVar('VITE_SPOTIFY_CLIENT_ID'), // Your actual client ID
-	redirectUri: 'http://localhost:5173/auth/callback', // Changed from https to http
+	redirectUri: 'http://127.0.0.1:5173/auth/callback', // Changed from https to http
 	scopes: [
 		'streaming', // Web Playback SDK
 		'user-read-email', // User profile
